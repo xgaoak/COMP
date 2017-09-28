@@ -12,6 +12,15 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
 	String search(String text) throws Exception {
 		//Write your code here
+		Connection connectiontodb = getConnection();
+		PreparedStatement stmt = connectiontodb.prepareStatement(
+				"SELECT response FROM chatbotdb where keyword like concat(text)");
+		stmt.setString(1, "text");
+		ResultSet rs = stmt.executeQuery();
+		while (rs.next())
+		{
+			return rs.getString(1);
+		}
 		return null;
 	}
 	
