@@ -13,16 +13,16 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 	public String search(String text) throws Exception {
 		String result = null;
 		Connection connection=getConnection();
-		boolean alreadyexist = true;
+		boolean notexist = false;
 		try
 		{
 			result=super.search(text);
 		}
 		catch(Exception e)
 		{
-			alreadyexist=false;
+			notexist = true;
 		}
-		if(alreadyexist)
+		if(!notexist)
 		{
 			return result;
 		}
@@ -38,9 +38,11 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				result=rs.getString(1);
 				rs.close();
 				stmt.close();
-				connection.close();}
-			catch (Exception e) {
-			log.info("Exception while reading file: {}", e.toString());
+				connection.close();
+			}
+			catch (Exception e) 
+			{
+				log.info("Exception while reading file: {}", e.toString());
 			} 
 		}
 		if (result != null)
