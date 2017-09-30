@@ -31,7 +31,7 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 			try 
 			{
 				PreparedStatement stmt=connection.prepareStatement(
-				"SELECT response FROM chatbotdb WHERE keyword like concat('%', ?, '%')");
+				"SELECT response FROM chatbotdb WHERE keyword like concat(?)");
 				stmt.setString(1, text);
 				ResultSet rs=stmt.executeQuery();
 				rs.next();
