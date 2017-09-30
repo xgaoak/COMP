@@ -11,12 +11,12 @@ import java.net.URI;
 public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
 	public String search(String text) throws Exception {
-		String result = null;
 		Connection connection=getConnection();
 		boolean notexist = false;
+		String result = null;
 		try
 		{
-			result=super.search(text);
+			result = super.search(text);
 		}
 		catch(Exception e)
 		{
@@ -47,7 +47,8 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 		}
 		if (result != null)
 			return result;
-		throw new Exception("NOT FOUND");
+		else
+			return "Not Found";
     }
 
 	
