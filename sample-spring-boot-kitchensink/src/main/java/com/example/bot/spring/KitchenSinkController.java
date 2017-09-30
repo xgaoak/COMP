@@ -242,14 +242,14 @@ public class KitchenSinkController {
                                         new URIAction("Go to line.me",
                                                       "https://line.me"),
                                         new PostbackAction("Say hello1",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯")
+                                                           "hello ")
                                 )),
                                 new CarouselColumn(imageUrl, "hoge", "fuga", Arrays.asList(
-                                        new PostbackAction("è¨€ hello2",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯",
-                                                           "hello ã�“ã‚“ã�«ã�¡ã�¯"),
+                                        new PostbackAction("hello2",
+                                                           "hello ",
+                                                           "hello "),
                                         new MessageAction("Say message",
-                                                          "Rice=ç±³")
+                                                          "Rice=a")
                                 ))
                         ));
                 TemplateMessage templateMessage = new TemplateMessage("Carousel alt text", carouselTemplate);
@@ -316,7 +316,7 @@ public class KitchenSinkController {
 
 
 	public KitchenSinkController() {
-		database = new DatabaseEngine();
+		database = new SQLDatabaseEngine();
 		itscLOGIN = System.getenv("ITSC_LOGIN");
 	}
 

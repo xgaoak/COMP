@@ -10,19 +10,34 @@ import java.net.URI;
 @Slf4j
 public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
-	String search(String text) throws Exception {
-		//Write your code here
-		Connection connectiontodb = getConnection();
-		PreparedStatement stmt = connectiontodb.prepareStatement(
-				"SELECT response FROM chatbotdb where keyword like concat(text)");
-		stmt.setString(1, "text");
-		ResultSet rs = stmt.executeQuery();
-		while (rs.next())
-		{
-			return rs.getString(1);
+	public String search(String text) throws Exception {
+		String result=null;
+		boolean exist=true;
+		try{result=super.search(text);
+				}catch(Exception e){exist=false;}
+		if(exist){return result;}
+		else {
+			try {
+				Connection connection=getConnection();
+				PreparedStatement stmt=connection.prepareStatement(
+				"SELECT response FROM chatbotdb WHERE keyword like concat('%', ?, '%')");
+				stmt.setString(1, text);
+				ResultSet rs=stmt.executeQuery();
+				rs.next();
+				result=rs.getString(1);
+				rs.close();
+				stmt.close();
+				connection.close();}
+			catch (Exception e) {
+			log.info("Exception while reading file: {}", e.toString());
+		} 
 		}
-		return null;
-	}
+		if (result != null)
+			return result;
+		throw new Exception("NOT FOUND");
+    }
+	private final String FILENAME = "/static/database.txt";
+
 	
 	
 	private Connection getConnection() throws URISyntaxException, SQLException {
