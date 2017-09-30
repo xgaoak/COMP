@@ -11,14 +11,25 @@ import java.net.URI;
 public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
 	public String search(String text) throws Exception {
-		String result=null;
-		boolean exist=true;
-		try{result=super.search(text);
-				}catch(Exception e){exist=false;}
-		if(exist){return result;}
-		else {
-			try {
-				Connection connection=getConnection();
+		String result = null;
+		Connection connection=getConnection();
+		boolean alreadyexist = true;
+		try
+		{
+			result=super.search(text);
+		}
+		catch(Exception e)
+		{
+			alreadyexist=false;
+		}
+		if(alreadyexist)
+		{
+			return result;
+		}
+		else 
+		{
+			try 
+			{
 				PreparedStatement stmt=connection.prepareStatement(
 				"SELECT response FROM chatbotdb WHERE keyword like concat('%', ?, '%')");
 				stmt.setString(1, text);
@@ -30,15 +41,13 @@ public class SQLDatabaseEngine extends DatabaseEngine {
 				connection.close();}
 			catch (Exception e) {
 			log.info("Exception while reading file: {}", e.toString());
-		} 
+			} 
 		}
 		if (result != null)
 			return result;
 		throw new Exception("NOT FOUND");
     }
-	private final String FILENAME = "/static/database.txt";
 
-	
 	
 	private Connection getConnection() throws URISyntaxException, SQLException {
 		Connection connection;
