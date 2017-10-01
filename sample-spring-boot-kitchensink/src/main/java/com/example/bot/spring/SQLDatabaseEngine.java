@@ -11,40 +11,28 @@ import java.net.URI;
 public class SQLDatabaseEngine extends DatabaseEngine {
 	@Override
 	public String search(String text) throws Exception {
+		//write your code here
 		Connection connection=getConnection();
-		boolean notexist = false;
 		String result = null;
-		try
+		result = super.search(text);
+		if (result == null)
+			return null;
+		try 
 		{
-			result = super.search(text);
+			PreparedStatement stmt=connection.prepareStatement(
+			"SELECT response FROM chatbotdb WHERE keyword like concat(?)");
+			stmt.setString(1, text);	
+		 	ResultSet rs=stmt.executeQuery();
+			rs.next();
+			result=rs.getString(1);
+			rs.close();		
+			stmt.close();
+			connection.close();
 		}
-		catch(Exception e)
+		catch (Exception e) 
 		{
-			notexist = true;
-		}
-		if(!notexist)
-		{
-			return result;
-		}
-		else 
-		{
-			try 
-			{
-				PreparedStatement stmt=connection.prepareStatement(
-				"SELECT response FROM chatbotdb WHERE keyword like concat(?)");
-				stmt.setString(1, text);
-				ResultSet rs=stmt.executeQuery();
-				rs.next();
-				result=rs.getString(1);
-				rs.close();
-				stmt.close();
-				connection.close();
-			}
-			catch (Exception e) 
-			{
-				log.info("Exception while reading file: {}", e.toString());
-			} 
-		}
+			log.info("Exception while reading file: {}", e.toString());
+		} 
 		if (result != null)
 			return result;
 		else
